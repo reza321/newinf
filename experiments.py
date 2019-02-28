@@ -5,8 +5,6 @@ import time
 import IPython
 from scipy.stats import pearsonr
 
-tf.random.set_random_seed(10)    
-
 def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
     def try_check(idx_to_check, label):
         Y_train_fixed = np.copy(Y_train_flipped)
@@ -88,7 +86,7 @@ def viz_top_influential_examples(model, test_idx):
 
 def test_retraining(model, test_idx, iter_to_load, force_refresh=False, 
                     num_to_remove=50, num_steps=1000, random_seed=17,
-                    remove_type='random'):
+                    remove_type='random',known_indices_to_remove=[]):
 
     np.random.seed(random_seed)
 
@@ -112,8 +110,13 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
             [test_idx], 
             np.arange(len(model.data_sets.train.labels)),
             force_refresh=force_refresh)
-        indices_to_remove = np.argsort(np.abs(predicted_loss_diffs))[-num_to_remove:]
-        predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+        if len(known_indices_to_remove)!=0:
+            print('you are considering part of trainable variables not all!')
+            indices_to_remove = known_indices_to_remove
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
+        else:
+            indices_to_remove = np.argsort(np.abs(predicted_loss_diffs))[-num_to_remove:]
+            predicted_loss_diffs = predicted_loss_diffs[indices_to_remove]
     else:
         raise ValueError('remove_type not well specified')
     actual_loss_diffs = np.zeros([num_to_remove])

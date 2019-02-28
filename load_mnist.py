@@ -124,15 +124,12 @@ def load_small_mnist(train_dir, validation_size=5000, random_seed=0):
 
   validation_images = data_sets.validation.x
   validation_labels = data_sets.validation.labels
-  # perm = np.arange(len(validation_labels))
-  # np.random.shuffle(perm)
-  # num_to_keep = int(len(validation_labels) / 10)
-  # perm = perm[:num_to_keep]  
-  # validation_images = validation_images[perm, :]
-  # validation_labels = validation_labels[perm]
 
-  test_images = data_sets.test.x
-  test_labels = data_sets.test.labels
+
+  num_to_keep = int(len(data_sets.test.labels) / 10)
+  test_images = data_sets.test.x[:num_to_keep]
+
+  test_labels = data_sets.test.labels[:num_to_keep]
   # perm = np.arange(len(test_labels))
   # np.random.shuffle(perm)
   # num_to_keep = int(len(test_labels) / 10)

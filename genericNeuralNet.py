@@ -168,7 +168,10 @@ class GenericNeuralNet(object):
         self.adversarial_loss, self.indiv_adversarial_loss = self.adversarial_loss(self.logits, self.labels_placeholder)
         if self.adversarial_loss is not None:
             self.grad_adversarial_loss_op = tf.gradients(self.adversarial_loss, self.params)
-        
+
+    def predict(self,input_X):
+        pred=self.logits()
+        return pred       
 
     def get_vec_to_list_fn(self):
         params_val = self.sess.run(self.params)
@@ -375,7 +378,7 @@ class GenericNeuralNet(object):
             duration = time.time() - start_time
 
             if verbose:
-                if step % 1000 == 0:
+                if step % 100 == 0:
                     # Print status to stdout.
                     print('Step %d: loss = %.8f (%.3f sec)' % (step, loss_val, duration))
 

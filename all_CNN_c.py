@@ -142,3 +142,6 @@ class All_CNN_C(GenericNeuralNet):
     def predictions(self, logits):
         preds = tf.nn.softmax(logits, name='preds')
         return preds
+    def predict(self,inputX):
+        pred=self.inference(inputX)
+        return pred
